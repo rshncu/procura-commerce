@@ -13,8 +13,17 @@ permissions:
 
 jobs:
   unit-tests:
-    name: Unit tests
+    name: Unit tests (${{ matrix.project }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api-gateway
+          - product-service
+          - order-service
+          - microservices-backend
+          - frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -25,4 +34,4 @@ jobs:
 
       - run: npm ci
 
-      - run: npx nx run-many -t test
+      - run: npx nx test ${{ matrix.project }}
