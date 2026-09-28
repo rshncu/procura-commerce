@@ -1,0 +1,142 @@
+{
+  "consumer": {
+    "name": "procura-frontend"
+  },
+  "interactions": [
+    {
+      "description": "a request to create an order using productId",
+      "request": {
+        "body": {
+          "customer": {
+            "name": "Jane Doe",
+            "phone": "+15551234567"
+          },
+          "products": [
+            {
+              "productId": "a1b2c3d4-e5f6-4789-a123-b456c789d012",
+              "quantity": 2
+            }
+          ],
+          "totalAmount": 2
+        },
+        "headers": {
+          "Authorization": "Bearer test-token",
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "header": {
+            "Authorization": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/orders"
+      },
+      "response": {
+        "body": {
+          "createdAt": "2026-09-26T00:00:00.000Z",
+          "customer": {
+            "name": "Jane Doe",
+            "phone": "+15551234567"
+          },
+          "id": "c1a2b3d4-e5f6-4789-a123-b456c789d012",
+          "products": [
+            {
+              "productCode": "SKU-1",
+              "quantity": 2
+            }
+          ],
+          "totalAmount": 2
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.products": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$.products[*].productCode": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.products[*].quantity": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.totalAmount": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 201
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "17.1.4"
+    },
+    "pactRust": {
+      "ffi": "0.5.8",
+      "models": "1.3.16"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "procura-api-gateway"
+  }
+}

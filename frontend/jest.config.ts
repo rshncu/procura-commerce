@@ -14,6 +14,8 @@ const config: Config = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../coverage/frontend',
   testEnvironment: 'jsdom',
+  // Pact consumer specs run separately (Node env) via the test-pact-consumer target (see pact/jest.config.ts).
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/pact/'],
 };
 
 export default createJestConfig(config);
