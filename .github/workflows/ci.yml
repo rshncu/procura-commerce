@@ -35,3 +35,48 @@ jobs:
       - run: npm ci
 
       - run: npx nx test ${{ matrix.project }}
+
+  pact-consumer:
+    name: Pact Consumer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npx nx test-pact-consumer frontend
+
+      - name: Check generated Pact contract
+        run: test -s frontend/pact/pacts/procura-frontend-procura-api-gateway.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pact-consumer-contract
+          path: frontend/pact/pacts/procura-frontend-procura-api-gateway.json
+          if-no-files-found: error
+
+  pact-provider:
+    name: Pact Provider Verification
+    runs-on: ubuntu-latest
+    needs: pact-consumer
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: pact-consumer-contract
+          path: frontend/pact/pacts
+
+      - run: npx nx test-pact-verify api-gateway
